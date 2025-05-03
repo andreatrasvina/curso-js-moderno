@@ -1,6 +1,7 @@
 # MI CURSO DE JAVASCRIPT MODERNO
 
-![Static Badge](https://img.shields.io/badge/Este%20es%20un%20badge%20creado%20por%20mi%20misma%20jiji?style=plastic&logo=el%20pepe&logoColor=%23ffb9dc&labelColor=%23ffffff&color=%23ffb9dc&link=https%3A%2F%2Fgithub.com%2Fandreatrasvina)
+[![Static Badge](https://img.shields.io/badge/Mi%20primer%20badge-Creado%20por%20mi%20misma%20jiji-%23ffb9dc?style=plastic&logo=github&logoColor=%23ffb9dc&labelColor=%23ffffff)](https://github.com/andreatrasvina)
+
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![Version](https://img.shields.io/badge/version-1.0.0-blue)
