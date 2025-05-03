@@ -1,0 +1,17 @@
+function setup() {
+    createCanvas(500, 500);
+    background(0);
+    drawLine(0, 0, 500, 500); 
+}
+
+
+function drawLine(x1, y1, x2, y2) {
+    let m = (y2 - y1) / (x2 - x1); 
+    let b = y1 - m * x1; 
+    stroke(255);
+    
+    for (let x = x1; x <= x2; x++) {
+        let y = m * x + b;
+        point(x, y);
+    }
+}
