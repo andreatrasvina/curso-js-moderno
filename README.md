@@ -2,6 +2,8 @@
 
 [![Static Badge](https://img.shields.io/badge/Mi%20primer%20badge-Creado%20por%20mi%20misma%20jiji-%23ffb9dc?style=plastic&logo=github&logoColor=%23ffb9dc&labelColor=%23ffffff)](https://github.com/andreatrasvina)
 
+![este es mi nuevo badge con Badgen.net](https://badgen.net/#static/%F0%9F%A7%BD/hola%20esponga/fff198?labelColor=ffffff)
+
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![Version](https://img.shields.io/badge/version-1.0.0-blue)
