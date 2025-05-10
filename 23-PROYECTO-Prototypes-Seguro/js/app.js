@@ -96,12 +96,25 @@ UI.prototype.mostrarMensaje = (mensaje, tipo) => {
 
 UI.prototype.mostrarResultado = (total, seguro) => {
 
+    let texto;
+
+    if(seguro.marca == '1'){
+        texto = "Americano";
+    }else if(seguro.marca == '2'){
+        texto = "Asiatico";
+    } else if(seguro.marca == '3'){
+        texto = 'Europeo';
+    }
+
     //crear resultado
     const div = document.createElement('div');
     div.classList.add('mt-10');
 
     div.innerHTML = `
         <p class="header">Tu Resumen</p>
+        <p class="font-bold">Marca: ${texto}</p>
+        <p class="font-bold">Year: ${seguro.year}</p>
+        <p class="font-bold">Tipo: ${seguro.tipo}</p>
         <p class="font-bold">Total: ${total}</p>
     `;
 
