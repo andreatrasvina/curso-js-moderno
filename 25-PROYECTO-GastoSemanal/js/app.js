@@ -33,6 +33,11 @@ class Presupuesto {
 
         this.restante = this.presupuesto - gastado;
     }
+
+    eliminarGasto(id){
+        this.gastos = this.gastos.filter(gasto => gasto.id !== id);//me traigo todos los ids menos el que coincide
+        this.calcularRestante();
+    }
 }
 
 let presupuesto;
@@ -94,6 +99,9 @@ class UI {
             const btnBorrar = document.createElement('button');
             btnBorrar.classList.add('btn', 'btn-danger', 'borrar-gasto');
             btnBorrar.innerHTML = '&times;';
+            btnBorrar.onclick = () => {
+                eliminarGasto(id);
+            }
 
             nuevoGasto.appendChild(btnBorrar);
 
@@ -124,6 +132,9 @@ class UI {
         } else if((presupuesto / 2) > restante){
             restanteDIV.classList.remove('alert-success', 'alert-danger');
             restanteDIV.classList.add('alert-warning');
+        }else{
+            restanteDIV.classList.remove('alert-danger', 'alert-warning');
+            restanteDIV.classList.add('alert-success');
         }
 
         //si el total es menor o iwal a 0
@@ -131,6 +142,8 @@ class UI {
             ui.imprimirAlerta('El presupuesto se ha agotado', 'error');
 
             formulario.querySelector('button[type="submit"]').disabled = true;
+        } else {
+            formulario.querySelector('button[type="submit"]').disabled = false;
         }
 
     }
@@ -198,4 +211,17 @@ function agregarGasto(e){
     //borrar las entradas de texto
     formulario.reset();
 
+}
+
+function eliminarGasto(id){
+    //elimina gasto del objeto
+    presupuesto.eliminarGasto(id);
+
+    //elimina gasato del html
+    const {gastos, restante} = presupuesto;
+    ui.agregarGastoListado(gastos);
+
+    ui.actualizarRestante(restante);
+
+    ui.comprobarPresupuesto(presupuesto);
 }
