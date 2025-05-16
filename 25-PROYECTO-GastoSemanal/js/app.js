@@ -24,7 +24,14 @@ class Presupuesto {
 
     nuevoGasto(gasto){
         this.gastos = [...this.gastos, gasto];
-        console.log(this.gastos);
+        this.calcularRestante();
+    }
+
+    //reduce va acumulando o iterando sobre el arreglo y entrega un total
+    calcularRestante(){ //el total se ira calculando con la suma de gasto, iniciando en 0
+        const gastado = this.gastos.reduce((total, gasto) => total + gasto.cantidad, 0);//total gastado
+
+        this.restante = this.presupuesto - gastado;
     }
 }
 
@@ -81,7 +88,7 @@ class UI {
             nuevoGasto.dataset.id = id;
 
             //agregar el html del gasto
-            nuevoGasto.innerHTML = ` ${nombre} <span class="badge badge-primary badge-pill"> ${cantidad} </span>`;
+            nuevoGasto.innerHTML = ` ${nombre} <span class="badge badge-primary badge-pill"> $${cantidad} </span>`;
 
             //btn para borrar el gasto
             const btnBorrar = document.createElement('button');
@@ -98,6 +105,10 @@ class UI {
 
     limpiarHTML() {
         gastoListado.innerHTML = '';
+    }
+
+    actualizarRestante(restante){
+        document.querySelector('#restante').textContent = restante;
     }
 }
 
@@ -153,8 +164,10 @@ function agregarGasto(e){
     ui.imprimirAlerta('Gasto agregado correctmanete');
 
     //imiprimir los gastos
-    const {gastos} = presupuesto;
+    const {gastos, restante } = presupuesto;
     ui.agregarGastoListado(gastos);
+
+    ui.actualizarRestante(restante);
 
     //borrar las entradas de texto
     formulario.reset();
