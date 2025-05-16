@@ -21,6 +21,11 @@ class Presupuesto {
         this.restante = Number(presupuesto);
         this.gastos = [];
     }
+
+    nuevoGasto(gasto){
+        this.gastos = [...this.gastos, gasto];
+        console.log(this.gastos);
+    }
 }
 
 let presupuesto;
@@ -88,7 +93,7 @@ function agregarGasto(e){
 
     //leer los datos del formulario
     const nombre = document.querySelector('#gasto').value;
-    const cantidad = document.querySelector('#cantidad').value;
+    const cantidad = Number(document.querySelector('#cantidad').value);
 
     //validacion
     if(nombre === '' || cantidad === ''){
@@ -100,4 +105,20 @@ function agregarGasto(e){
 
         return;
     }
+
+    //generar obj con la informacion de gasto
+    const gasto = {
+        nombre, 
+        cantidad, 
+        id: Date.now() 
+    } //lo contrario de destructuring, este une los elementos
+
+    //añade un nuevo gasto
+    presupuesto.nuevoGasto(gasto);
+
+    ui.imprimirAlerta('Gasto agregado correctmanete');
+
+    //reinicia el formulario
+    formulario.reset();
+
 }
