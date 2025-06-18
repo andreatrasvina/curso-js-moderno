@@ -35,9 +35,7 @@ function datosCita(e){
 function submitCita(e) {
     e.preventDefault();
 
-    const { paciente, propietario, email, fecha, sintomas } = citaObj;
-
-    if(paciente.trim() === '' || propietario.trim() === '' || email.trim() === ''){
+    if(Object.values(citaObj).some(valor => valor.trim() === "")){
         console.log('todos los campos son obligatorios');
         return;
     }
