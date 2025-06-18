@@ -135,6 +135,35 @@ function submitCita(e) {
         return;
     }
 
-    citas.agregar(citaObj);
-    citaObj.textContent = ''
+    citas.agregar({...citaObj});
+
+    //reinicia el texto de los inputs
+    formulario.reset();
+
+    //reinicia el objeto
+    reiniciarObjCita();
+
+    //mensaje de exito
+    new Notificacion({
+        texto: 'La cita se registro correctamente',
+        tipo: 'exito'
+    });
+}
+
+function reiniciarObjCita(){
+
+    citaObj.paciente = '';
+    citaObj.propietario = '';
+    citaObj.email = '';
+    citaObj.fecha = '';
+    citaObj.sintomas = '';
+
+    //otra manera de hacerlo con asign, (que objeto se asignara, { por que contenido se reemplazara})
+    // Object.assign(citaObj, {
+    //     paciente: '',
+    //     propietario: '',
+    //     email: '',
+    //     fecha: '',
+    //     sintomas: '',
+    // });
 }
