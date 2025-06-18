@@ -15,7 +15,8 @@ const citaObj = {
 }
 
 //evento
-pacienteInput.addEventListener('input', (e) => {
-    citaObj.paciente = e.target.value;
+pacienteInput.addEventListener('change', (e) => {
+    citaObj[e.target.name] = e.target.value;
+
     console.log(citaObj);
 });
