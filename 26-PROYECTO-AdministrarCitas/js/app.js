@@ -12,6 +12,7 @@ const btnEditar = document.querySelector('.btn-editar');
 
 //objeto de cita
 const citaObj = {
+    id: generarID(),
     paciente: '',
     propietario: '',
     email: '',
@@ -175,6 +176,7 @@ function submitCita(e) {
 
 function reiniciarObjCita(){
 
+    citaObj.id = generarID();
     citaObj.paciente = '';
     citaObj.propietario = '';
     citaObj.email = '';
@@ -183,12 +185,17 @@ function reiniciarObjCita(){
 
     //otra manera de hacerlo con asign, (que objeto se asignara, { por que contenido se reemplazara})
     // Object.assign(citaObj, {
+    //     id: generarID(),
     //     paciente: '',
     //     propietario: '',
     //     email: '',
     //     fecha: '',
     //     sintomas: '',
     // });
+}
+
+function generarID(){
+    return Math.random().toString(36).substring(2) + Date.now();
 }
 
 function cargarEdicion(cita){
