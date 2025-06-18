@@ -6,6 +6,7 @@ const fechaInput = document.querySelector('#fecha');
 const sintomasInput = document.querySelector('#sintomas');
 
 const formulario = document.querySelector('#formulario-cita');
+const contenedorCitas = document.querySelector('#citas');
 
 //objeto de cita
 const citaObj = {
@@ -16,7 +17,7 @@ const citaObj = {
     sintomas: '',
 }
 
-//evento
+//eventos
 pacienteInput.addEventListener('change', datosCita);
 propietarioInput.addEventListener('change', datosCita);
 emailInput.addEventListener('change', datosCita);
@@ -25,25 +26,7 @@ sintomasInput.addEventListener('change', datosCita);
 
 formulario.addEventListener('submit', submitCita);
 
-
-function datosCita(e){
-    citaObj[e.target.name] = e.target.value;
-
-    console.log(citaObj);
-}
-
-function submitCita(e) {
-    e.preventDefault();
-
-    if(Object.values(citaObj).some(valor => valor.trim() === "")){
-        const notificacion = new Notificacion({
-            texto: 'Todos los campos son obligatorios',
-            tipo: 'error'
-        });
-        return;
-    }
-}
-
+//clases
 class Notificacion {
     constructor({texto, tipo}){
         this.texto = texto;
@@ -74,4 +57,84 @@ class Notificacion {
             alerta.remove();
         }, 4000);
     }
+}
+
+class AdminCitas{
+    constructor(){
+        this.citas = [];
+
+    }
+
+    agregar(citas){
+        this.citas = [...this.citas, citas];
+        //console.log(this.citas);
+        this.mostrar();
+    }
+
+    mostrar(){
+        //limpiar HTML previo
+        while(contenedorCitas.firstChild){
+            contenedorCitas.removeChild(contenedorCitas.firstChild);
+        }
+
+        //generando las citas
+        this.citas.forEach(cita => {
+            
+            const divCita = document.createElement('div');
+            divCita.classList.add('mx-5', 'my-10', 'bg-white', 'shadow-md', 'px-5', 'py-10' ,'rounded-xl', 'p-3');
+        
+            const paciente = document.createElement('p');
+            paciente.classList.add('font-normal', 'mb-3', 'text-gray-700', 'normal-case')
+            paciente.innerHTML = `<span class="font-bold uppercase">Paciente: </span> ${cita.paciente}`;
+        
+            const propietario = document.createElement('p');
+            propietario.classList.add('font-normal', 'mb-3', 'text-gray-700', 'normal-case')
+            propietario.innerHTML = `<span class="font-bold uppercase">Propietario: </span> ${cita.propietario}`;
+        
+            const email = document.createElement('p');
+            email.classList.add('font-normal', 'mb-3', 'text-gray-700', 'normal-case')
+            email.innerHTML = `<span class="font-bold uppercase">E-mail: </span> ${cita.email}`;
+        
+            const fecha = document.createElement('p');
+            fecha.classList.add('font-normal', 'mb-3', 'text-gray-700', 'normal-case')
+            fecha.innerHTML = `<span class="font-bold uppercase">Fecha: </span> ${cita.fecha}`;
+        
+            const sintomas = document.createElement('p');
+            sintomas.classList.add('font-normal', 'mb-3', 'text-gray-700', 'normal-case')
+            sintomas.innerHTML = `<span class="font-bold uppercase">Síntomas: </span> ${cita.sintomas}`;
+        
+            // Agregar al HTML
+            divCita.appendChild(paciente);
+            divCita.appendChild(propietario);
+            divCita.appendChild(email);
+            divCita.appendChild(fecha);
+            divCita.appendChild(sintomas);
+            contenedorCitas.appendChild(divCita);
+        });
+    }
+
+}
+
+
+//funciones
+function datosCita(e){
+    citaObj[e.target.name] = e.target.value;
+    //console.log(citaObj);
+}
+
+const citas = new AdminCitas();
+
+function submitCita(e) {
+    e.preventDefault();
+
+    if(Object.values(citaObj).some(valor => valor.trim() === "")){
+        const notificacion = new Notificacion({
+            texto: 'Todos los campos son obligatorios',
+            tipo: 'error'
+        });
+        return;
+    }
+
+    citas.agregar(citaObj);
+    citaObj.textContent = ''
 }
