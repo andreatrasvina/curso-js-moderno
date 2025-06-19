@@ -4,6 +4,7 @@ const propietarioInput = document.querySelector('#propietario');
 const emailInput = document.querySelector('#email');
 const fechaInput = document.querySelector('#fecha');
 const sintomasInput = document.querySelector('#sintomas');
+const telefonoInput = document.querySelector('#telefono');
 
 const formulario = document.querySelector('#formulario-cita');
 const formularioInput = document.querySelector('#formulario-cita input[type="submit"]');
@@ -22,6 +23,7 @@ const citaObj = {
     email: '',
     fecha: '',
     sintomas: '',
+    telefono: 0,
 }
 
 //eventos
@@ -30,6 +32,7 @@ propietarioInput.addEventListener('change', datosCita);
 emailInput.addEventListener('change', datosCita);
 fechaInput.addEventListener('change', datosCita);
 sintomasInput.addEventListener('change', datosCita);
+telefonoInput.addEventListener('change', datosCita);
 
 formulario.addEventListener('submit', submitCita);
 
@@ -126,6 +129,10 @@ class AdminCitas{
             sintomas.classList.add('font-normal', 'mb-3', 'text-gray-700', 'normal-case')
             sintomas.innerHTML = `<span class="font-bold uppercase">Síntomas: </span> ${cita.sintomas}`;
 
+            const telefono = document.createElement('p');
+            telefono.classList.add('font-normal', 'mb-3', 'text-gray-700', 'normal-case')
+            telefono.innerHTML = `<span class="font-bold uppercase">Telefono: </span> ${cita.telefono}`;
+
             //btns para eliminar y editar
             const btnEditar = document.createElement('button');
             btnEditar.classList.add('py-2', 'px-10', 'bg-indigo-600', 'hover:bg-indigo-700', 'text-white', 'font-bold', 'uppercase', 'rounded-lg', 'flex', 'items-center', 'gap-2', 'btn-editar');
@@ -151,6 +158,7 @@ class AdminCitas{
             divCita.appendChild(email);
             divCita.appendChild(fecha);
             divCita.appendChild(sintomas);
+            divCita.appendChild(telefono);
 
             divCita.appendChild(contenedorBtns);
 
@@ -172,7 +180,7 @@ const citas = new AdminCitas();
 function submitCita(e) {
     e.preventDefault();
 
-    if(Object.values(citaObj).some(valor => valor.trim() === "")){
+    if(Object.values(citaObj).some(valor => valor.trim() === "" || citaObj.telefono === 0)){
         const notificacion = new Notificacion({
             texto: 'Todos los campos son obligatorios',
             tipo: 'error'
@@ -212,6 +220,7 @@ function reiniciarObjCita(){
     citaObj.email = '';
     citaObj.fecha = '';
     citaObj.sintomas = '';
+    citaObj.telefono = 0;
 
     formularioInput.value = 'Registrar paciente';
 
@@ -238,6 +247,7 @@ function cargarEdicion(cita){
     emailInput.value = cita.email;
     fechaInput.value = cita.fecha;
     sintomasInput.value = cita.sintomas;
+    telefonoInput.value = cita.telefono;
 
     editando = true;
 
