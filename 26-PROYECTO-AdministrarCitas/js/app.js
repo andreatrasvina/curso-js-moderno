@@ -6,9 +6,13 @@ const fechaInput = document.querySelector('#fecha');
 const sintomasInput = document.querySelector('#sintomas');
 
 const formulario = document.querySelector('#formulario-cita');
+const formularioInput = document.querySelector('#formulario-cita input[type="submit"]');
+
 const contenedorCitas = document.querySelector('#citas');
 
 const btnEditar = document.querySelector('.btn-editar');
+
+let editando = false;
 
 //objeto de cita
 const citaObj = {
@@ -71,6 +75,11 @@ class AdminCitas{
     agregar(citas){
         this.citas = [...this.citas, citas];
         //console.log(this.citas);
+        this.mostrar();
+    }
+
+    editar(citaActualizada){
+        this.citas = this.citas.map( cita => cita.id === citaActualizada.id ? citaActualizada : cita );
         this.mostrar();
     }
 
@@ -159,7 +168,20 @@ function submitCita(e) {
         return;
     }
 
-    citas.agregar({...citaObj});//le pasamos una copia en vez de moficiar el obj original
+    if(editando){
+        citas.editar({...citaObj})
+        new Notificacion({
+            texto: 'Editado correctamente',
+            tipo: 'exito'
+        });
+    }else {
+        citas.agregar({...citaObj});//le pasamos una copia en vez de moficiar el obj original
+        new Notificacion({
+            texto: 'La cita se registro correctamente',
+            tipo: 'exito'
+        });
+        
+    }
 
     //reinicia el texto de los inputs
     formulario.reset();
@@ -167,11 +189,7 @@ function submitCita(e) {
     //reinicia el objeto
     reiniciarObjCita();
 
-    //mensaje de exito
-    new Notificacion({
-        texto: 'La cita se registro correctamente',
-        tipo: 'exito'
-    });
+    editando = false;
 }
 
 function reiniciarObjCita(){
@@ -182,6 +200,8 @@ function reiniciarObjCita(){
     citaObj.email = '';
     citaObj.fecha = '';
     citaObj.sintomas = '';
+
+    formularioInput.value = 'Registrar paciente';
 
     //otra manera de hacerlo con asign, (que objeto se asignara, { por que contenido se reemplazara})
     // Object.assign(citaObj, {
@@ -199,5 +219,16 @@ function generarID(){
 }
 
 function cargarEdicion(cita){
-    console.log(cita)
+    Object.assign(citaObj, cita);
+
+    pacienteInput.value = cita.paciente;
+    propietarioInput.value = cita.propietario;
+    emailInput.value = cita.email;
+    fechaInput.value = cita.fecha;
+    sintomasInput.value = cita.sintomas;
+
+    editando = true;
+
+    formularioInput.value = 'Guardar cambios';
+
 }
