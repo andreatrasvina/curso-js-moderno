@@ -27,7 +27,21 @@ function crmDB(){
     }
 
     //configuracion de la base de datos
-    crmDB.onupgradeneeded = function(){
-        console.log('este metodo solo se ejecuta una sola vez');
+    crmDB.onupgradeneeded = function(e){
+        const ReferenciaDB = e.target.result;
+
+        //el object store es lo que nos permite crear las columnas de la bd
+        const objectStore = ReferenciaDB.createObjectStore('crm', {
+            keyPath: 'crm',
+            autoIncrement : true
+        });
+
+        //definir las columnas
+        objectStore.createIndex('nombre', 'nombre', { unique: false});
+        objectStore.createIndex('email', 'email', { unique: true});
+        objectStore.createIndex('telefono', 'telefono', { unique: false});
+
+        console.log('columnas creadas');
+
     }
 }
