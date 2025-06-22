@@ -6,9 +6,14 @@
 // soportado en todos los navegadores
 // auqnue es una base de datos completa, sus datos siguen siendo visibles en el navegador
 
+let DB;
 
 document.addEventListener('DOMContentLoaded', () => {
     crmDB();
+
+    setTimeout(() => {
+        crearCliente();
+    }, 5000);
 });
 
 function crmDB(){
@@ -24,6 +29,8 @@ function crmDB(){
     //se se crea bien
     crmDB.onsuccess = function () {
         console.log('Base de datos creada');
+
+        DB = crmDB.result;
     }
 
     //configuracion de la base de datos
@@ -44,4 +51,30 @@ function crmDB(){
         console.log('columnas creadas');
 
     }
+}
+
+function crearCliente() {
+    //                              nombre de la bd, modo escritura y lectura
+    let transaction = DB.transaction(['crm'], 'readwrite');
+
+    transaction.oncomplete = function() {
+        console.log('Transaccion completada');
+    }
+
+    transaction.onerror = function() {
+        console.log('Hubo un error en la transaccion');
+    }
+
+    //                                          nombre de la bd
+    const objectStore = transaction.objectStore('crm');
+
+    const nuevoCliente = {
+        telefono: 612200066,
+        nombre: 'Andrea',
+        email: 'alucero@example.com'
+    }
+
+    const peticion = objectStore.add(nuevoCliente);
+
+    console.log(peticion);
 }
