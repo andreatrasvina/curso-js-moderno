@@ -210,8 +210,23 @@ function nuevaCita(e) {
         // Añade la nueva cita
         administrarCitas.agregarCita({...citaObj});
 
-        // Mostrar mensaje de que todo esta bien...
-        ui.imprimirAlerta('Se agregó correctamente')
+
+        //INSERTA REGISTRO EN INDEXED DB
+        const transaction = DB.transaction(['citas'], 'readwrite');
+
+        //habilitar el object store
+        const objectStore = transaction.objectStore('citas');
+        
+        //insertar en la bd
+        objectStore.add(citaObj, citaObj.id);
+
+        transaction.oncomplete = function() {
+            console.log('cita agregada');
+
+            // Mostrar mensaje de que todo esta bien...
+            ui.imprimirAlerta('Se agregó correctamente')
+        }
+
     }
 
 
