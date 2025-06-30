@@ -19,6 +19,7 @@
 
         abrirConexion.onsuccess = function(){
             DB = abrirConexion.result;
+            console.log('llegue aqio')
         }
     }
 
@@ -36,6 +37,39 @@
             imprimirAlerta('Todos los argumentos son necesarios', 'error');
 
             return;
+        }
+
+        //crear un objeto con la informacion
+        const cliente = {
+            nombre,
+            email,
+            telefono,
+            empresa
+        }
+
+        cliente.id = Date.now();
+
+        crearNuevoCliente(cliente);
+        console.log(cliente);
+    }
+    
+    //bd
+    function crearNuevoCliente(cliente){
+        const transaction = DB.transaction(['crm'], 'readwrite');
+
+        const objectStore = transaction.objectStore('crm');
+
+        objectStore.add(cliente);
+
+        transaction.onerror = function(){
+            console.log('hubo un error en la bd');
+        }
+
+        transaction.onsuccess = function(){
+            console.log('creado correctamente');
+
+            imprimirAlerta('El usuario se agrego');
+
         }
     }
 
