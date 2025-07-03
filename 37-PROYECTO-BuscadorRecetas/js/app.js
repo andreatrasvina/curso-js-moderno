@@ -144,8 +144,60 @@ function iniciarApp(){
 
         modalBody.appendChild(listGroup);
 
+        //agregar botones favorito y cerrar dinamicos
+        const modalFooter = document.querySelector('.modal-footer');
+        limpiarHtml(modalFooter);
+
+        const btnFavorito = document.createElement('BUTTON');
+        btnFavorito.classList.add('btn', 'btn-danger', 'col');
+        btnFavorito.textContent = existeStorage(idMeal) ? 'Eliminar Favorito' : 'Guardar Favorito';
+
+        //almacenar y quitar de localstorage
+        btnFavorito.onclick = function(){
+
+            if(existeStorage(idMeal)){
+                eliminarFavorito(idMeal);
+                btnFavorito.textContent = 'Guardar Favorito';
+                return;
+            }
+
+            agregarFavorito({
+                id: idMeal,
+                titulo: strMeal,
+                img: strMealThumb
+            });
+            btnFavorito.textContent = 'Eliminar Favorito';
+
+        }
+
+        const btnCerrar = document.createElement('BUTTON');
+        btnCerrar.classList.add('btn', 'btn-secondary', 'col');
+        btnCerrar.textContent = 'Cerrar';
+        btnCerrar.onclick = function(){
+            modal.hide();
+        }
+
+        modalFooter.appendChild(btnFavorito);
+        modalFooter.appendChild(btnCerrar);
+
         //muestra el modal
         modal.show();
+    }
+
+    function agregarFavorito(receta){
+        const favoritos = JSON.parse(localStorage.getItem('favoritos')) ?? []; 
+        localStorage.setItem('favoritos', JSON.stringify([...favoritos, receta]));
+    }
+
+    function existeStorage(id){
+        const favoritos = JSON.parse(localStorage.getItem('favoritos')) ?? []; 
+        return favoritos.some(favorito => favorito.id === id);
+    }
+
+    function eliminarFavorito(id){
+        const favoritos = JSON.parse(localStorage.getItem('favoritos')) ?? []; 
+        const nuevosFavoritos = favoritos.filter(favorito => favorito.id !== id);
+        localStorage.setItem('favoritos', JSON.stringify(nuevosFavoritos));
     }
 
     function limpiarHtml(selector){
