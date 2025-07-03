@@ -3,12 +3,20 @@ document.addEventListener('DOMContentLoaded', iniciarApp);
 
 function iniciarApp(){
     const selectCategorias = document.querySelector('#categorias');
-    selectCategorias.addEventListener('change', seleccionarCategoria);
+
+    if(selectCategorias){
+        selectCategorias.addEventListener('change', seleccionarCategoria);
+        obtenerCategorias();
+    }
 
     const resultado = document.querySelector('#resultado');
     const modal = new bootstrap.Modal('#modal', {});
 
-    obtenerCategorias();
+    const favoritosDiv = document.querySelector('.favoritos');
+    if(favoritosDiv){
+        obtenerFavoritos();
+    }
+
 
     function obtenerCategorias(){
         const url = 'https://www.themealdb.com/api/json/v1/1/categories.php';
@@ -61,15 +69,15 @@ function iniciarApp(){
             
             const recetaImagen = document.createElement('IMG');
             recetaImagen.classList.add('card-img-top');
-            recetaImagen.alt = `imagen de la receta: ${strMeal}`;
-            recetaImagen.src = strMealThumb;
+            recetaImagen.alt = `imagen de la receta: ${strMeal ?? categoriaReceta.titulo}`;
+            recetaImagen.src = strMealThumb ?? categoriaReceta.img;
 
             const recetaCardBody = document.createElement('DIV');
             recetaCardBody.classList.add('card-body');
 
             const recetaHeading = document.createElement('H3');
             recetaHeading.classList.add('card-title', 'mb-3');
-            recetaHeading.textContent = strMeal;
+            recetaHeading.textContent = strMeal ?? categoriaReceta.titulo;
 
             const recetaButton = document.createElement('BUTTON');
             recetaButton.classList.add('btn', 'btn-danger', 'w-100');
@@ -77,7 +85,7 @@ function iniciarApp(){
             // recetaButton.dataset.bsTarget = "#modal";
             // recetaButton.dataset.bsToggle = "modal";
             recetaButton.onclick = function() {
-                seleccionarReceta(idMeal);
+                seleccionarReceta(idMeal ?? categoriaReceta.id);
             }
 
             //inyectar en el html, se debe inyectar en el orden que quieres dar la estructura
@@ -201,6 +209,20 @@ function iniciarApp(){
         const favoritos = JSON.parse(localStorage.getItem('favoritos')) ?? []; 
         const nuevosFavoritos = favoritos.filter(favorito => favorito.id !== id);
         localStorage.setItem('favoritos', JSON.stringify(nuevosFavoritos));
+    }
+
+    function obtenerFavoritos(){
+        const favoritos = JSON.parse(localStorage.getItem('favoritos')) ?? []; 
+        if(favoritos.length){
+            mostrarRecetas(favoritos);
+            return
+        }
+
+        const sinFavoritos = document.createElement('P');
+        sinFavoritos.textContent = 'No hay favoritos aún';
+        sinFavoritos.classList.add('fs-4', 'font-bold', 'mt-5');
+
+        resultado.appendChild(sinFavoritos);
     }
 
     function mostrarToast(mensaje){
