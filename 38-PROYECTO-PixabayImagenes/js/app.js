@@ -1,8 +1,10 @@
 const resultado = document.querySelector('#resultado');
 const formulario = document.querySelector('#formulario');
+const paginacionDiv = document.querySelector('#paginacion');
 
-const registrosPorPagina = 50;
+const registrosPorPagina = 40;
 let totalPaginas;
+let iterador;
 
 window.onload = () => {
     formulario.addEventListener('submit', validarFormulario);
@@ -50,15 +52,22 @@ function mostrarAlerta(tipo, mensaje){
 
 function buscarImagenes(terminoBusqueda){
     const key = '51163818-4c077900c7660cae16ff33ca2';
-    const url = `https://pixabay.com/api/?key=${key}&q=${terminoBusqueda}&per_page=100`;
+    const url = `https://pixabay.com/api/?key=${key}&q=${terminoBusqueda}&per_page=${registrosPorPagina}`;
 
     fetch(url)
         .then(consulta => consulta.json())
         .then(imagenes => {
             totalPaginas = calcularPaginas(imagenes.totalHits);
-            console.log(totalPaginas);
+            // console.log(totalPaginas);
             mostrarImagenes(imagenes.hits)
         })
+}
+
+//Generador, registrara la cantidad de elementos de acuerdo a las paginas
+function *crearPaginador(total){
+    for (let i = 1; i <= total; i++) {
+        yield i;
+    }
 }
 
 function calcularPaginas(total){
@@ -67,12 +76,12 @@ function calcularPaginas(total){
 
 function mostrarImagenes(imagenes){
 
-    limpiarHTML();
+    limpiarHTML(resultado);
 
     //itera imgs y construye el html
     imagenes.forEach(imagen => {
         const { previewURL, likes, views, largeImageURL } = imagen;
-        console.log(imagen);
+        // console.log(imagen);
 
         resultado.innerHTML += `
             <div class="w-1/2 md:w-1/3 lg:w-1/4 p-3 mb-4">
@@ -94,12 +103,37 @@ function mostrarImagenes(imagenes){
         `;
     });
 
+    //limpiar el paginador previo
+    limpiarHTML(paginacionDiv);
+
+    //nuevo html
+    imprimirPaginador();
+
 
 }
 
-function limpiarHTML(){
+function imprimirPaginador(){
+    iterador = crearPaginador(totalPaginas);
+
+    while(true){
+        const { value, done } = iterador.next();
+        if(done) return;
+
+        //caso contrario
+        const boton = document.createElement('a');
+        boton.href = '#';
+        boton.dataset.pagina = value;
+        boton.textContent = value;
+        boton.classList.add('siguiente', 'bg-yellow-400', 'px-4', 'py-1', 'mr-2', 'font-bold', 'mb-4', 'uppercase', 'rounded');
+
+        paginacionDiv.appendChild(boton);
+
+    }
+}
+
+function limpiarHTML(elemento){
     //borra html previo
-    while(resultado.firstChild){
-        resultado.removeChild(resultado.firstChild);
+    while(elemento.firstChild){
+        elemento.removeChild(elemento.firstChild);
     }
 }
