@@ -63,6 +63,17 @@ function calcularCriptomoneda(e){
     }
 
     //consultar api
+    consultarApi();
+}
+
+function consultarApi(){
+    const { moneda, criptomoneda } = objBusqueda;
+
+    const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${criptomoneda}&tsyms=${moneda}`;
+
+    fetch(url)
+        .then(consulta => consulta.json())
+        .then(cotizacion => console.log(cotizacion.DISPLAY[criptomoneda][moneda]))
 }
 
 function mostrarAlerta(mensaje){
